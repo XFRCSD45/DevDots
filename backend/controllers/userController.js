@@ -303,11 +303,11 @@ exports.check=async(req,res,next)=>{
 }
 exports.test=async(req,res,next)=>{
    try{
-           let message="test message";
+           let message=`Hey there you visited our website but didnt make any purchase please come back and buy some stuffs  <a href='http://localhost:3000' >Click here </a>`;
            let  from=process.env.USER;
-           let to=req?.body?.email || "shanigupta120103@gmail.com";
-           let subject="ecommerce";
-          const response= await sendemail({from, to, subject, message})
+           let to=req.body.email || "shanigupta120103@gmail.com";
+           let subject="Cart Abandonment Mesage";
+          const response= await sendemail(from, to, subject, message)
           console.log(response);
           res.send("mail sent");
    }

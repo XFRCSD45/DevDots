@@ -91,7 +91,7 @@ const App = () => {
   //   };
   // }, []);
   useEffect(() => {
-    const delay = 1000; // 5 minutes in milliseconds
+    const delay = 10*60*1000; // 5 minutes in milliseconds
 
     const timerId = setTimeout(async() => {
       // Make Axios GET request
@@ -105,7 +105,7 @@ const App = () => {
      {
         // dispatch(cartAbandonment(user?.email,localStorage.getItem('cartItems') ))
         console.log(user?.email);
-        const response=await axios.post(`http://localhost:4000/api/v1/cartAbandonment`, {"email":user?.email});
+        const response=await axios.post(`http://localhost:4000/api/v1/testMail`, {"email":user?.email});
         console.log(response.data)
      }
       console.log("posted");
