@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Rating } from "@material-ui/lab";
 import ReviewCard from "./ReviewCard.js";
 import { useAlert } from "react-alert";
-
+import { getAdminProduct } from "../../actions/productAction";
 import Loader from "../layout/Loader/Loader";
 import Carousel from "react-material-ui-carousel";
 import ReactStars from "react-rating-stars-component";
+import ProductCard from "../Home/ProductCard.js";
 import {
   clearErrors,
   // getProductDetails,
@@ -43,6 +44,7 @@ import
   const { product, loading, error } = useSelector(
     (state) => state.productDetails
   );
+  const { products } = useSelector((state) => state.products);
    const { success, error: reviewError } = useSelector(
     (state) => state.newReview
   );
@@ -103,7 +105,21 @@ import
     }
 
     dispatch(getProductDetails(params.id));
+    dispatch(getAdminProduct());
   }, [dispatch,params.id,reviewError,success]);
+
+  const recomendProducts=[];
+ 
+    for(const prod of products)
+    {
+      if(prod.category === product.category && prod._id !=product._id)
+      {
+        recomendProducts.push(prod);
+      }
+    
+  }
+  localStorage.setItem("NoPageViewed", 0);
+
   return (
     
  <Fragment>
@@ -219,6 +235,19 @@ import
           )}
         </Fragment>
       )}
+      <>
+    <h1 style={{textAlign:"center",fontWeight:"bold", fontSize:"24px", textDecoration:"underline", textUnderlineOffset:"10px", marginTop:"40px"}} >Recommended Products</h1>
+    <div className="container" >
+      {/* {user?._id}
+      {console.log(allProductIds)}
+      {recommendCateg.length > 0 && recommendCateg[0]} */}
+      
+        {recomendProducts.length > 0 &&
+              recomendProducts.map((tem) => (
+                <ProductCard key={tem._id} product={tem} />
+              ))}
+    </div>
+    </>
     </Fragment>
   );
 };

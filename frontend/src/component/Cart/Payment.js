@@ -86,7 +86,7 @@ const Payment = ({ history }) => {
 
       if (result.error) {
         payBtn.current.disabled = false;
-
+        
         alert.error(result.error.message);
       } else {
         if (result.paymentIntent.status === "succeeded") {
@@ -94,7 +94,7 @@ const Payment = ({ history }) => {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
           };
-
+          localStorage.setItem("NoCheckOutConfirmed",0);
           dispatch(createOrder(order));
 
           navigate("/success");

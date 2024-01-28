@@ -1,5 +1,5 @@
 const express=require("express");
-const { registerUser, loginUser,updateProfile,updatePassword, logout ,userDetails, getSingleUser, updateRole, deleteUser, getAllUser, forgetpassword, resetPassword} = require("../controllers/userController");
+const { registerUser, loginUser,updateProfile,updatePassword, logout ,userDetails, getSingleUser, updateRole, deleteUser, getAllUser, forgetpassword, resetPassword, check,cartAbandonment, test} = require("../controllers/userController");
 const {isAuth,isrole}=require("../middleware/auth")
 const router=express.Router();
 
@@ -14,5 +14,7 @@ router.route("/password/forgot").post(forgetpassword)
 router.route("/password/reset/:token").put(resetPassword);
 router.route("/me/update").put(isAuth, updateProfile);
 router.route("/password/update").put(isAuth, updatePassword);
-
+// router.route("/check").get(check);
+router.route("/cartAbandonment").post(cartAbandonment);
+router.route("/testMail").post(test);
 module.exports=router;

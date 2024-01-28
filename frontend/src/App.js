@@ -4,11 +4,12 @@ import OrderSuccess from "./component/Cart/orderSuccess";
 import Payment from "./component/Cart/Payment";
 import Dashboard from "./component/Admin/Dashboard.js";
 import ProtectedRoute from "./component/Route/ProtectedRoute";
-
+import { useDispatch } from "react-redux";
 import Home from "./component/Home/Home";
 import Footer from "./component/layout/Footer/Footer";
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import Header from "./component/layout/Header/Header";
+import Virtual from "./component/virtual/virtual.js";
 import WebFont from "webfontloader";
 import UpdatePassword from "./component/User/UpdatePassword";
 import UpdateProfile from "./component/User/UpdateProfile";
@@ -21,7 +22,7 @@ import Cart from "./component/Cart/Cart";
 import Shipping from "./component/Cart/Shipping";
 // import OrderSuccess from "./component/Cart/OrderSuccess";
 import OrderList from "./component/Admin/OrderList";
-
+import { cartAbandonment, check } from "./actions/userAction";
 import ConfirmOrder from "./component/Cart/ConfirmOrder";
 import MyOrders from "./component/Order/MyOrders";
 import OrderDetails from "./component/Order/OrderDetails";
@@ -50,6 +51,7 @@ import Contact from "./component/layout/Contact/Contact";
 const App = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [stripeApiKey, setStripeApiKey] = useState("");
+  const dispatch = useDispatch();
   async function getStripeApiKey() {
     // const { data } = await axios.get("/api/v1/stripeapikey");
 
@@ -66,8 +68,50 @@ const App = () => {
     store.dispatch(loadUser());
     getStripeApiKey( );
     // console.log(stripeApiKey);
+    
 
   
+  }, []);
+
+  // useEffect(async() => {
+  //   const handleTabClose = async(event) => {
+  //     event.preventDefault();
+  //      dispatch(check);
+  //     // redirect("http://localhost:4000/api/v1/check");
+  //     // window.location.href = 'http:localhost:4000/api/v1/check';
+     
+  //     return (event.returnValue =
+  //       'Are you sure you want to exit?');
+  //   };
+
+  //   window.addEventListener('beforeunload', handleTabClose);
+
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleTabClose);
+  //   };
+  // }, []);
+  useEffect(() => {
+    const delay = 1000; // 5 minutes in milliseconds
+
+    const timerId = setTimeout(async() => {
+      // Make Axios GET request
+      const numericResponses=[localStorage.getItem("NoPageViewed"),localStorage.getItem("NoCustomerLogIn"),localStorage.getItem("NoCheckOutConfirmed"),localStorage.getItem("NoCheckOutInitiated"),localStorage.getItem("NoItemsAdded") ]
+      console.log(numericResponses);
+     const response=await axios.post( "https://cart-abandonment.onrender.com/v1",
+      numericResponses);
+      console.log("external data ",response.data);
+      // console.log(user?.email);
+     if(response.data.prediction == 1 && user?.email )
+     {
+        // dispatch(cartAbandonment(user?.email,localStorage.getItem('cartItems') ))
+        console.log(user?.email);
+        const response=await axios.post(`http://localhost:4000/api/v1/cartAbandonment`, {"email":user?.email});
+        console.log(response.data)
+     }
+      console.log("posted");
+    }, delay);
+
+    return () => clearTimeout(timerId); // Clear the timer if the component unmounts before the delay is reached
   }, []);
   return (
     <Router>
@@ -89,7 +133,7 @@ const App = () => {
         <Route exact path="/products" element={<Products/>} />
         <Route path="/login" element={<LoginSignUp/>} />
         <Route path="/account" element={<Profile/>} />
-       
+        <Route path="/virtual" element={<Virtual/>} />
         <Route  path="/cart" element={<Cart/>} />
         <Route  path="/shipping" element={<Shipping/>} />
         <Route exact path="/order/confirm" element={<ConfirmOrder/>} />

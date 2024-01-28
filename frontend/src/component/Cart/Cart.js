@@ -34,6 +34,7 @@ const Cart = () => {
   };
 
   const checkoutHandler = () => {
+    localStorage.setItem("NoCheckOutInitiated",0);
   navigate("/shipping");
   };
 

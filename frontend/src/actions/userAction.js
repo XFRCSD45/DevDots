@@ -156,6 +156,22 @@ export const forgotPassword = (email) => async (dispatch) => {
     });
   }
 };
+// export const cartAbandonment = (email, cartItems) => async (dispatch) => {
+//   try {
+//     // dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+//     const config = { headers: { "Content-Type": "application/json" } };
+
+//     const { data } = await axios.post(`/api/v1/cartAbandonment`, email, cartItems);
+
+//     // dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
+//   } catch (error) {
+//     dispatch({
+//       type: FORGOT_PASSWORD_FAIL,
+//       payload: error.response.data.message,
+//     });
+//   }
+// };
 
 // Reset Password
 export const resetPassword = (token, passwords) => async (dispatch) => {
@@ -245,3 +261,16 @@ export const deleteUser = (id) => async (dispatch) => {
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
 };
+export const check=(req,res)=>async(dispatch)=>{
+  try{
+      console.log("aya");
+      // dispatch(check);
+      const {data}=await axios.get('http:localhost:4000/api/v1/check');
+      console.log(data);
+      console.log("reached");
+  }
+  catch(err)
+  {
+    console.log(err);
+  }
+}

@@ -3,6 +3,7 @@ const sendToken = require("../utils/jwt");
 const ErrorHander = require("../utils/errorhander");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendEmail = require("../utils/email");
+const sendemail = require("../utils/abandon");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 
@@ -56,6 +57,7 @@ if(!ispassword){
         "messege":"incorrect password"
 })
 }
+
 sendToken(user,200,res)
 }
 
@@ -88,7 +90,7 @@ exports.logout = async (req, res, next) => {
       users,
     });
   };
-
+  
   exports.getSingleUser = async (req, res, next) => {
     const user = await User.findById(req.params.id);
   
@@ -225,6 +227,44 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHander(error.message, 500));
     }
   }
+  exports.cartAbandonment=async(req,res,next)=>{
+  //   const user=await User.findOne({email:req.body.email})
+  //   if (!user) {
+  //     return next(new ErrorHander("User not found", 404));
+  //   }
+  // const resetToken=user.getresetpasswordtoken();
+  //   await user.save({validateBeforeSave:false})
+  // const resetPasswordUrl = `${req.protocol}://${req.get(
+  //   "host"
+  // )}/password/reset/${resetToken}`;
+    const message = `Hey you visited our website but didnt make any purchase .Take a look at your cart items`;
+    // for(const item of req.body.cartItems) {
+    //       message=message + ` ${item.name}`;
+    // }
+    console.log(message)
+    console.log(req.body.email);
+    try{
+      await sendEmail({
+        email:req.body.email,
+        subject:`Ecommerce`,
+        message,
+      })
+      res.status(200).json({
+        success: true,
+        message: `Email sent to ${req.body.email} successfully`,
+
+      })
+
+    }
+    catch(error){
+      // user.resetPasswordToken = undefined;
+      // user.resetPasswordExpire = undefined;
+  
+      // await user.save({ validateBeforeSave: false });
+  
+      return next(new ErrorHander(error.message, 500));
+    }
+  }
 
 exports.resetPassword=async(req,res,next)=>{
    const  resetPasswordToken=crypto
@@ -256,3 +296,23 @@ exports.resetPassword=async(req,res,next)=>{
 //    const user=await User.findById(req.user.id).select("+password")
 
 // }
+
+exports.check=async(req,res,next)=>{
+  console.log("reached");
+  return res.json({"message":"pahuch gya"})
+}
+exports.test=async(req,res,next)=>{
+   try{
+           let message="test message";
+           let  from=process.env.USER;
+           let to=req?.body?.email || "shanigupta120103@gmail.com";
+           let subject="ecommerce";
+          const response= await sendemail({from, to, subject, message})
+          console.log(response);
+          res.send("mail sent");
+   }
+   catch(err)
+   {
+            console.log(err);
+   }
+}

@@ -21,6 +21,9 @@ exports.getAllProducts=async(req,res,next)=>{
           productscount
      } )
 }
+exports.getRecommendedProducts = async(req,res,next)=>{
+  
+}
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
 
@@ -118,7 +121,6 @@ exports.deleteProduct=async(req,res,next)=>{
     message: "Product Delete Successfully",
   });
 }
-
 exports.getProductDetails =async (req, res, next) => {
     const product = await Product.findById(req.params.id);
   

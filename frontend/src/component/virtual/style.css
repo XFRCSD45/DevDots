@@ -1,0 +1,59 @@
+.map{
+    height: 100vh;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.icon
+{
+    position: absolute;
+    z-index: 1;
+    left: 35%;
+    top: 22%;
+    font-size: 2rem;
+    text-shadow: 2px 3px  #6c757d;
+    animation-fill-mode: backwards;
+    /* color: bl; */
+    
+}
+.icon1
+{
+    position: absolute;
+    z-index: 1;
+    left: 43%;
+    top: 6%;
+}
+.icon2
+{
+    position: absolute;
+    z-index: 1;
+    left: 35%;
+    top: 27%;
+}
+.icon3
+{
+    position: absolute;
+    z-index: 1;
+    left: 56%;
+    top: 26%;
+}
+.icon4
+{
+    position: absolute;
+    z-index: 1;
+    left: 43%;
+    top: 50%;
+
+}
+.icon:hover{
+    transform: scale(1.1);
+}
+.name .image-container {
+    display: none;
+  }
+  
+  .name:hover .image-container {
+    display: block; /* or any other display value like inline, inline-block, etc. */
+  }
